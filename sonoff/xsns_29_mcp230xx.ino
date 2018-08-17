@@ -192,7 +192,7 @@ bool MCP230xx_CheckForInterrupt(void) {
                     break;
                 }
                 if (report_int) {
-                  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_TIME "\":\"%s\""), GetDateAndTime(DT_LOCAL).c_str());
+                  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{%s"), DateAndTimeJsonField(DT_LOCAL).c_str());
                   snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"MCP230XX_INT\":{\"D%i\":%i}"), mqtt_data, intp+(mcp230xx_port*8), ((mcp230xx_intcap >> intp) & 0x01));
                   snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s}"), mqtt_data);
                   MqttPublishPrefixTopic_P(RESULT_OR_STAT, mqtt_data);
@@ -384,7 +384,7 @@ void MCP230xx_OutputTelemetry(void) {
     if (Settings.mcp230xx_config[pinx].pinmode == 5) outputcount++;
   }
   if (outputcount) {
-    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_TIME "\":\"%s\",\"MCP230_OUT\": {"), GetDateAndTime(DT_LOCAL).c_str());
+    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{%s,\"MCP230_OUT\": {"), DateAndTimeJsonField(DT_LOCAL).c_str());
     for (uint8_t pinx = 0;pinx < mcp230xx_pincount;pinx++) {
       if (Settings.mcp230xx_config[pinx].pinmode == 5) {
         snprintf_P(mqtt_data,sizeof(mqtt_data), PSTR("%s\"OUTD%i\":%i,"),mqtt_data,pinx,(gpiototal>>pinx)&1);

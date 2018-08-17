@@ -1464,7 +1464,7 @@ void MqttShowState()
 {
   char stemp1[33];
 
-  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s{\"" D_JSON_TIME "\":\"%s\",\"" D_JSON_UPTIME "\":\"%s\""), mqtt_data, GetDateAndTime(DT_LOCAL).c_str(), GetDateAndTime(DT_UPTIME).c_str());
+  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s{%s,%s"), mqtt_data, DateAndTimeJsonField(DT_LOCAL).c_str(), DateAndTimeJsonField(DT_UPTIME).c_str());
 #ifdef USE_ADC_VCC
   dtostrfd((double)ESP.getVcc()/1000, 3, stemp1);
   snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s,\"" D_JSON_VCC "\":%s"), mqtt_data, stemp1);
@@ -1493,7 +1493,7 @@ void MqttShowState()
 
 boolean MqttShowSensor()
 {
-  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s{\"" D_JSON_TIME "\":\"%s\""), mqtt_data, GetDateAndTime(DT_LOCAL).c_str());
+  snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("%s{%s"), mqtt_data, DateAndTimeJsonField(DT_LOCAL).c_str());
   int json_data_start = strlen(mqtt_data);
   for (byte i = 0; i < MAX_SWITCHES; i++) {
 #ifdef USE_TM1638
@@ -1587,7 +1587,7 @@ void PerformEverySecond()
 
   if ((2 == RtcTime.minute) && latest_uptime_flag) {
     latest_uptime_flag = false;
-    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{\"" D_JSON_TIME "\":\"%s\",\"" D_JSON_UPTIME "\":\"%s\"}"), GetDateAndTime(DT_LOCAL).c_str(), GetDateAndTime(DT_UPTIME).c_str());
+    snprintf_P(mqtt_data, sizeof(mqtt_data), PSTR("{%s,%s}"), DateAndTimeJsonField(DT_LOCAL).c_str(), DateAndTimeJsonField(DT_UPTIME).c_str());
     MqttPublishPrefixTopic_P(TELE, PSTR(D_RSLT_UPTIME));
   }
   if ((3 == RtcTime.minute) && !latest_uptime_flag) latest_uptime_flag = true;

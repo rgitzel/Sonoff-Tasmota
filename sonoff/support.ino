@@ -1637,6 +1637,43 @@ String GetBuildDateAndTime()
   return String(bdt);
 }
 
+String GetSecondsSinceEpoch()
+{
+  char seconds[11];
+  snprintf_P(seconds, sizeof(x), PSTR("%ld"), local_time);
+  return String(seconds);
+}
+
+String DateAndTimeJsonField(byte time_type)
+{
+  char s[40];
+  char *quote, *field, *value;
+
+  quote = "\"";
+
+  switch (time_type) {
+    case DT_UPTIME:
+      field = D_JSON_UPTIME;
+      value = GetDateAndType(time_type).c_str();
+      break;
+    case DT_LOCAL:
+      field = D_JSON_TIME;
+      if (TIME_FMT_EPOCH) {
+        quote = "";
+        value = GetSecondsSinceEpoch();
+      } else {
+        value = GetDateAndType(time_type).c_str();
+      }
+      break;
+    default:
+      return "";
+  }
+
+  snprintf_P(s, sizeof(s), PSTR("\"%s\": %s%s%s", field, quote, , quote);
+
+  return String(s);
+}
+
 String GetDateAndTime(byte time_type)
 {
   // enum GetDateAndTimeOptions { DT_LOCAL, DT_UTC, DT_RESTART, DT_UPTIME };

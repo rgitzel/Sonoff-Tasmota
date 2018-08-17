@@ -1675,7 +1675,7 @@ String DateAndTimeJsonField(byte time_type)
       return "";
   }
 
-  snprintf_P(field, sizeof(field), PSTR("\"%s\": %s%s%s"), name, quote, value.c_str(), quote);
+  snprintf_P(field, sizeof(field), PSTR("\"%s\":%s%s%s"), name, quote, value.c_str(), quote);
 
   return String(field);
 }

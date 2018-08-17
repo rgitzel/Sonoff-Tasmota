@@ -150,8 +150,6 @@
 #define TIME_STD_HOUR          3                  // Hour (0 to 23)
 #define TIME_STD_OFFSET        +60                // Offset from UTC in minutes (-780 to +780)
 
-#define TIME_FMT_EPOCH    1
-
 // -- Location ------------------------------------
 #define LATITUDE               49.2827           // [Latitude] Your location to be used with sunrise and sunset
 #define LONGITUDE              -123.1207         // [Longitude] Your location to be used with sunrise and sunset
@@ -227,13 +225,13 @@
 #define MQTT_TELE_RETAIN     0                   // Tele messages may send retain flag (0 = off, 1 = on)
 
 // -- MQTT - Domoticz -----------------------------
-#define USE_DOMOTICZ                             // Enable Domoticz (+6k code, +0.3k mem)
-  #define DOMOTICZ_IN_TOPIC    "domoticz/in"     // Domoticz Input Topic
-  #define DOMOTICZ_OUT_TOPIC   "domoticz/out"    // Domoticz Output Topic
+//#define USE_DOMOTICZ                             // Enable Domoticz (+6k code, +0.3k mem)
+//  #define DOMOTICZ_IN_TOPIC    "domoticz/in"     // Domoticz Input Topic
+//  #define DOMOTICZ_OUT_TOPIC   "domoticz/out"    // Domoticz Output Topic
 
 // -- MQTT - Home Assistant Discovery -------------
-#define USE_HOME_ASSISTANT                       // Enable Home Assistant Discovery Support (+2k code)
-  #define HOME_ASSISTANT_DISCOVERY_PREFIX "homeassistant"  // Home Assistant discovery prefix
+//#define USE_HOME_ASSISTANT                       // Enable Home Assistant Discovery Support (+2k code)
+//  #define HOME_ASSISTANT_DISCOVERY_PREFIX "homeassistant"  // Home Assistant discovery prefix
 
 // -- MQTT - TLS ----------------------------------
   // !!! TLS uses a LOT OF MEMORY so be careful to enable other options at the same time !!!
@@ -241,18 +239,18 @@
 
 // -- KNX IP Protocol -----------------------------
 //#define USE_KNX                                  // Enable KNX IP Protocol Support (+9.4k code, +3k7 mem)
-  #define USE_KNX_WEB_MENU                       // Enable KNX WEB MENU (+8.3k code, +144 mem)
+//  #define USE_KNX_WEB_MENU                       // Enable KNX WEB MENU (+8.3k code, +144 mem)
 
 // -- HTTP ----------------------------------------
 #define USE_WEBSERVER                            // Enable web server and Wifi Manager (+66k code, +8k mem)
   #define WEB_PORT             80                // Web server Port for User and Admin mode
   #define WEB_USERNAME         "admin"           // Web server Admin mode user name
-  #define USE_EMULATION                          // Enable Belkin WeMo and Hue Bridge emulation for Alexa (+16k code, +2k mem)
+//  #define USE_EMULATION                          // Enable Belkin WeMo and Hue Bridge emulation for Alexa (+16k code, +2k mem)
 
 // -- mDNS ----------------------------------------
-#define USE_DISCOVERY                            // Enable mDNS for the following services (+8k code, +0.3k mem)
-  #define WEBSERVER_ADVERTISE                    // Provide access to webserver by name <Hostname>.local/
-  #define MQTT_HOST_DISCOVERY                    // Find MQTT host server (overrides MQTT_HOST if found)
+//#define USE_DISCOVERY                            // Enable mDNS for the following services (+8k code, +0.3k mem)
+//  #define WEBSERVER_ADVERTISE                    // Provide access to webserver by name <Hostname>.local/
+//  #define MQTT_HOST_DISCOVERY                    // Find MQTT host server (overrides MQTT_HOST if found)
 
 // -- Time ----------------------------------------
 #define USE_TIMERS                               // Add support for up to 16 timers (+2k2 code)

@@ -150,6 +150,8 @@
 #define TIME_STD_HOUR          3                  // Hour (0 to 23)
 #define TIME_STD_OFFSET        +60                // Offset from UTC in minutes (-780 to +780)
 
+#define TIME_FMT_EPOCH         1
+
 // -- Location ------------------------------------
 #define LATITUDE               48.858360         // [Latitude] Your location to be used with sunrise and sunset
 #define LONGITUDE              2.294442          // [Longitude] Your location to be used with sunrise and sunset

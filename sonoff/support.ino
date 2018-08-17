@@ -1637,10 +1637,10 @@ String GetBuildDateAndTime()
   return String(bdt);
 }
 
-String GetTimestampSeconds(uint32_t timestamp)
+String DateAndTimeSecondsString(uint32_t date_and_time)
 {
   char seconds[11];
-  snprintf_P(seconds, sizeof(seconds), PSTR("%ld"), timestamp);
+  snprintf_P(seconds, sizeof(seconds), PSTR("%ld"), date_and_time);
   return String(seconds);
 }
 
@@ -1650,6 +1650,8 @@ String DateAndTimeJsonField(byte time_type)
   char *quote, *name;
   String value;
 
+  // the one tricky thing is that we need quotes around a string timestamp, but not a numeric timestamp;
+  //  we'll assume the former, and change it if we need the latter
   quote = "\"";
 
   switch (time_type) {
@@ -1657,18 +1659,18 @@ String DateAndTimeJsonField(byte time_type)
       name = D_JSON_UPTIME;
       if (TIME_FMT_EPOCH) {
         quote = "";
-        value = GetTimestampSeconds(uptime);
+        value = DateAndTimeSecondsString(uptime);
       } else {
-        value = GetDateAndTime(time_type);
+        value = GetDateAndTime(DT_UPTIME);
       }
       break;
     case DT_LOCAL:
       name = D_JSON_TIME;
       if (TIME_FMT_EPOCH) {
         quote = "";
-        value = GetTimestampSeconds(utc_time);
+        value = DateAndTimeSecondsString(utc_time);
       } else {
-        value = GetDateAndTime(time_type);
+        value = GetDateAndTime(DT_LOCAL);
       }
       break;
     default:

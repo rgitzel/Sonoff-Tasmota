@@ -1640,8 +1640,8 @@ String GetBuildDateAndTime()
 String GetDateAndTime(byte time_type)
 {
   // enum GetDateAndTimeOptions { DT_LOCAL, DT_UTC, DT_RESTART, DT_UPTIME };
-  // "2017-03-07T11:08:02" - ISO8601:2004
-  char dt[21];
+  // "2017-03-07T11:08:02-07:00" - ISO8601:2004
+  char dt[27];
   TIME_T tmpTime;
 
   if (DT_UPTIME == time_type) {
@@ -1657,10 +1657,12 @@ String GetDateAndTime(byte time_type)
     snprintf_P(dt, sizeof(dt), PSTR("%dT%02d:%02d:%02d"),
       tmpTime.days, tmpTime.hour, tmpTime.minute, tmpTime.second);
   } else {
+    int8_t timezone = Settings.timezone;
     switch (time_type) {
       case DT_UTC:
         BreakTime(utc_time, tmpTime);
         tmpTime.year += 1970;
+        timezone = 0;
         break;
       case DT_RESTART:
         if (restart_time == 0) {
@@ -1672,8 +1674,8 @@ String GetDateAndTime(byte time_type)
       default:
         tmpTime = RtcTime;
     }
-    snprintf_P(dt, sizeof(dt), PSTR("%04d-%02d-%02dT%02d:%02d:%02d"),
-      tmpTime.year, tmpTime.month, tmpTime.day_of_month, tmpTime.hour, tmpTime.minute, tmpTime.second);
+    snprintf_P(dt, sizeof(dt), PSTR("%04d-%02d-%02dT%02d:%02d:%02d%+03d:00"),
+      tmpTime.year, tmpTime.month, tmpTime.day_of_month, tmpTime.hour, tmpTime.minute, tmpTime.second, timezone);
   }
   return String(dt);
 }

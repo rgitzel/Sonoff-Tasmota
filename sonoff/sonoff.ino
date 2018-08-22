@@ -383,6 +383,15 @@ uint8_t GetFanspeed()
   return fanspeed;
 }
 
+void SetFanspeed(uint8_t fanspeed)
+{
+ for (byte i = 0; i < 3; i++) {
+    uint8_t state = kIFan02Speed[fanspeed][i];
+//    uint8_t state = pgm_read_byte(kIFan02Speed +(speed *3) +i);
+    ExecuteCommandPower(i +2, state, SRC_IGNORE);  // Use relay 2, 3 and 4
+  }
+}
+
 /********************************************************************************************/
 
 void MqttDataHandler(char* topic, byte* data, unsigned int data_len)
@@ -537,11 +546,7 @@ void MqttDataHandler(char* topic, byte* data, unsigned int data_len)
         }
       }
       if ((payload >= 0) && (payload <= 3) && (payload != GetFanspeed())) {
-        for (byte i = 0; i < 3; i++) {
-          uint8_t state = kIFan02Speed[payload][i];
-//          uint8_t state = pgm_read_byte(kIFan02Speed +(payload *3) +i);
-          ExecuteCommandPower(i +2, state, SRC_IGNORE);  // Use relay 2, 3 and 4
-        }
+        SetFanspeed(payload);
       }
       snprintf_P(mqtt_data, sizeof(mqtt_data), S_JSON_COMMAND_NVALUE, command, GetFanspeed());
     }
@@ -1522,6 +1527,11 @@ void PerformEverySecond()
 {
   uptime++;
 
+  if ((4 == uptime) && (SONOFF_IFAN02 == Settings.module)) {  // Microcontroller needs 3 seconds before accepting commands
+    SetDevicePower(1, SRC_RETRY);      // Sync with default power on state microcontroller being Light ON and Fan OFF
+    SetDevicePower(power, SRC_RETRY);  // Set required power on state
+  }
+
   if (blockgpio0) blockgpio0--;
 
   for (byte i = 0; i < MAX_PULSETIMERS; i++) {
@@ -2454,7 +2464,10 @@ void setup()
   Serial.println();
   seriallog_level = LOG_LEVEL_INFO;  // Allow specific serial messages until config loaded
 
-  snprintf_P(my_version, sizeof(my_version), PSTR("%d.%d.%d.%d"), VERSION >> 24 & 0xff, VERSION >> 16 & 0xff, VERSION >> 8 & 0xff, VERSION & 0xff);
+  snprintf_P(my_version, sizeof(my_version), PSTR("%d.%d.%d"), VERSION >> 24 & 0xff, VERSION >> 16 & 0xff, VERSION >> 8 & 0xff);
+  if (VERSION & 0xff) {
+    snprintf_P(my_version, sizeof(my_version), PSTR("%s.%d"), my_version, VERSION & 0xff);
+  }
 #ifdef BE_MINIMAL
   snprintf_P(my_version, sizeof(my_version), PSTR("%s-" D_JSON_MINIMAL), my_version);
 #endif  // BE_MINIMAL
